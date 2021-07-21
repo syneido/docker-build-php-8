@@ -9,7 +9,6 @@ apk add --no-cache fcgi file gettext gnu-libiconv
 # install gnu-libiconv and set LD_PRELOAD env to make iconv work fully on Alpine image.
 # see https://github.com/docker-library/php/issues/240#issuecomment-763112749
 export LD_PRELOAD="/usr/lib/preloadable_libiconv.so"
-RUN_DEPS="unzip libzip icu imagemagick libmcrypt libjpeg-turbo libpng make"
 
 apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
@@ -28,5 +27,11 @@ pecl clear-cache
 
 docker-php-ext-enable apcu opcache
 
-apk add --no-cache --virtual rundeps ${RUN_DEPS} make
+runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"
+apk add --no-cache --virtual rundeps $runDeps make
 apk del .build-deps
