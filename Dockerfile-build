@@ -1,5 +1,5 @@
 FROM alpine as new-alpine
-FROM php:8.0-cli-alpine
+FROM php:8.0-cli-alpine3.13
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
