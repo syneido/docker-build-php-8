@@ -20,7 +20,7 @@ apk add --no-cache --virtual .build-deps \
 		gmp-dev
 
 docker-php-ext-configure zip
-docker-php-ext-install -j$(nproc) intl pdo_pgsql zip soap gmp
+docker-php-ext-install -j$(nproc) intl pdo_pgsql pdo_mysql zip soap gmp
 
 pecl install apcu-5.1.19
 pecl clear-cache
