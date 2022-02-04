@@ -22,7 +22,7 @@ apk add --no-cache --virtual .build-deps \
 docker-php-ext-configure zip
 docker-php-ext-install -j$(nproc) intl pdo_pgsql pdo_mysql zip soap gmp
 
-pecl install apcu-5.1.19
+pecl install apcu-5.1.21
 pecl clear-cache
 
 docker-php-ext-enable apcu opcache
