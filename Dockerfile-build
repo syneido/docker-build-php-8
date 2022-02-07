@@ -26,6 +26,7 @@ RUN HOME=/ \
     && wget -O phpunit https://phar.phpunit.de/phpunit-9.5.6.phar && chmod +x phpunit && mv phpunit /usr/local/bin/phpunit \
     && wget -O php-cs-fixer-v3 https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v3.5.0/php-cs-fixer.phar && chmod +x php-cs-fixer-v3 && mv php-cs-fixer-v3 /usr/local/bin/php-cs-fixer \
     && wget -O phpstan https://github.com/phpstan/phpstan/releases/download/1.4.5/phpstan.phar && chmod +x phpstan && mv phpstan /usr/local/bin/phpstan \
+    && wget -O phpmetrics https://github.com/phpmetrics/PhpMetrics/releases/download/v2.7.4/phpmetrics.phar && chmod +x phpmetrics && mv phpmetrics /usr/local/bin/phpmetrics \
     && chmod -R o+rwx $COMPOSER_DIR $SYMFONY_DIR
 
 WORKDIR /app
