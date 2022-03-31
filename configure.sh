@@ -17,10 +17,15 @@ apk add --no-cache --virtual .build-deps \
 		libxml2-dev \
 		postgresql-dev \
 		zlib-dev \
-		gmp-dev
+		gmp-dev \
+    libpng-dev \
+    libwebp-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
 
 docker-php-ext-configure zip
-docker-php-ext-install -j$(nproc) intl pdo_pgsql pdo_mysql zip soap gmp
+docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype
+docker-php-ext-install -j$(nproc) intl pdo_pgsql pdo_mysql zip soap gmp gd exif
 
 pecl install apcu-5.1.21
 pecl clear-cache
