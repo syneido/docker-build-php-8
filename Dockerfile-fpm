@@ -6,6 +6,10 @@ COPY php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY conf.d/php.prod.ini /usr/local/etc/php
 COPY --from=new-alpine /etc/ssl/cert.pem /etc/ssl/cert.pem
 
+COPY docker-healthcheck /usr/local/bin/docker-healthcheck
+RUN chmod +x /usr/local/bin/docker-healthcheck
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 CMD ["docker-healthcheck"]
+
 RUN /configure.sh \
     && rm /configure.sh
 WORKDIR /var/www
