@@ -1,5 +1,5 @@
 FROM alpine as new-alpine
-FROM php:8.1-cli-alpine3.15
+FROM php:8.1-cli-alpine3.15 as build
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
@@ -30,4 +30,8 @@ RUN HOME=/ \
 
 WORKDIR /app
 
-
+FROM build as build-sqlsrv
+COPY configure-sqlsrv.sh /
+COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
+RUN /configure-sqlsrv.sh \
+    && rm /configure-sqlsrv.sh

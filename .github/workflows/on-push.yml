@@ -1,7 +1,7 @@
 name: deploy to ghcr.io
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feat/sqlsrv ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Build and push
+      - name: Build and push build
         uses: docker/build-push-action@v2
         with:
           context: ./
@@ -27,9 +27,10 @@ jobs:
           cache-from: type=registry,ref=${{ github.repository_owner }}/build-${{ env.BASE_IMAGE_NAME }}:latest
           cache-to: type=inline
           tags: ghcr.io/${{ github.repository_owner }}/build-${{ env.BASE_IMAGE_NAME }}:latest
+          target: build
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      - name: Build and push
+      - name: Build and push prod-php-fpm
         uses: docker/build-push-action@v2
         with:
           context: ./
@@ -41,7 +42,7 @@ jobs:
           target: prod
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      - name: Build and push
+      - name: Build and push dev-php-fpm
         uses: docker/build-push-action@v2
         with:
           context: ./
@@ -51,5 +52,42 @@ jobs:
           cache-to: type=inline
           tags: ghcr.io/${{ github.repository_owner }}/dev-${{ env.BASE_IMAGE_NAME }}-fpm:latest
           target: dev
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      # SQLSRV version
+      - name: Build and push build-sqlsrv
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile-build
+          push: true
+          cache-from: type=registry,ref=${{ github.repository_owner }}/build-${{ env.BASE_IMAGE_NAME }}-sqlsrv:latest
+          cache-to: type=inline
+          tags: ghcr.io/${{ github.repository_owner }}/build-${{ env.BASE_IMAGE_NAME }}-sqlsrv:latest
+          target: build-sqlsrv
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Build and push prod-php-fpm-sqlsrv
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile-fpm
+          push: true
+          cache-from: type=registry,ref=${{ github.repository_owner }}/prod-${{ env.BASE_IMAGE_NAME }}-fpm-sqlsrv:latest
+          cache-to: type=inline
+          tags: ghcr.io/${{ github.repository_owner }}/prod-${{ env.BASE_IMAGE_NAME }}-fpm-sqlsrv:latest
+          target: prod-sqlsrv
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Build and push dev-php-fpm-sqlsrv
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile-fpm
+          push: true
+          cache-from: type=registry,ref=${{ github.repository_owner }}/dev-${{ env.BASE_IMAGE_NAME }}-fpm-sqlsrv:latest
+          cache-to: type=inline
+          tags: ghcr.io/${{ github.repository_owner }}/dev-${{ env.BASE_IMAGE_NAME }}-fpm-sqlsrv:latest
+          target: dev-sqlsrv
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

@@ -23,5 +23,17 @@ RUN apk add --no-cache $PHPIZE_DEPS \
         && docker-php-ext-enable xdebug \
         && apk del $PHPIZE_DEPS
 
+FROM prod as prod-sqlsrv
+COPY configure-sqlsrv.sh /
+COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
+RUN /configure-sqlsrv.sh \
+    && rm /configure-sqlsrv.sh
+
+FROM dev as dev-sqlsrv
+COPY configure-sqlsrv.sh /
+COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
+RUN /configure-sqlsrv.sh \
+    && rm /configure-sqlsrv.sh
+
 ENTRYPOINT ["docker-dev-entrypoint"]
 CMD ["php-fpm"]
