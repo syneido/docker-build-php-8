@@ -1,7 +1,7 @@
 name: deploy to ghcr.io
 on:
   push:
-    branches: [ master,feat/8.2]
+    branches: [ master]
 jobs:
   build:
     runs-on: ubuntu-latest
