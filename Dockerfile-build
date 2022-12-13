@@ -1,5 +1,6 @@
+ARG PHP_VERSION
 FROM alpine as new-alpine
-FROM php:8.1-cli-alpine3.15 as build
+FROM php:${PHP_VERSION}-cli-alpine3.16 as build
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
@@ -14,14 +15,15 @@ RUN HOME=/ \
     && rm /configure.sh \
     && mkdir $COMPOSER_DIR $SYMFONY_DIR \
     && apk add --no-cache $PHPIZE_DEPS \
-    && pecl install xdebug-3.1.2 \
+    && apk add --update linux-headers \
+    && pecl install xdebug-3.2.0 \
     && docker-php-ext-enable xdebug \
     && apk del $PHPIZE_DEPS \
     && rm -r /tmp/pear/cache/* /tmp/pear/download/* \
     # Composer
     && curl --silent --fail-early https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     # Symfony CLI \
-    && curl -sS https://get.symfony.com/cli/installer | bash && chmod +x /.symfony/bin/symfony && mv /.symfony/bin/symfony /usr/local/bin/symfony \
+    && curl -sS https://get.symfony.com/cli/installer | bash && chmod +x /.symfony5/bin/symfony && mv /.symfony5/bin/symfony /usr/local/bin/symfony \
     # QA - Globally https://twitter.com/s_bergmann/status/999635212723212288
     && wget -O phpunit https://phar.phpunit.de/phpunit-9.5.6.phar && chmod +x phpunit && mv phpunit /usr/local/bin/phpunit \
     && wget -O php-cs-fixer-v3 https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v3.5.0/php-cs-fixer.phar && chmod +x php-cs-fixer-v3 && mv php-cs-fixer-v3 /usr/local/bin/php-cs-fixer \
