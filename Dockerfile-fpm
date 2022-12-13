@@ -1,6 +1,6 @@
 ARG PHP_VERSION
 FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-fpm-alpine3.15 as prod
+FROM php:${PHP_VERSION}-fpm-alpine3.16 as prod
 
 COPY configure.sh /
 COPY php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
