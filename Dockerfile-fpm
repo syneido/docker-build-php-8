@@ -18,11 +18,14 @@ WORKDIR /var/www
 FROM prod as dev
 COPY docker-dev-entrypoint /usr/local/bin
 COPY conf.d/90-xdebug.ini /usr/local/etc/php/conf.d/
+COPY conf.d/docker-php-ext-mongo.ini /usr/local/etc/php/conf.d/
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && apk add --update linux-headers \
     && pecl install xdebug-3.2.0 \
     && docker-php-ext-enable xdebug \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
     && apk del $PHPIZE_DEPS
 
 FROM prod as prod-sqlsrv
