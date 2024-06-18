@@ -1,6 +1,7 @@
 ARG PHP_VERSION
+ARG ALPINE_VERSION
 FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-fpm-alpine3.16 as prod
+FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION} as prod
 
 COPY configure.sh /
 COPY php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
@@ -21,7 +22,7 @@ COPY conf.d/90-xdebug.ini /usr/local/etc/php/conf.d/
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && apk add --update linux-headers \
-    && pecl install xdebug-3.2.0 \
+    && pecl install xdebug-3.3.2 \
     && docker-php-ext-enable xdebug \
     && apk del $PHPIZE_DEPS
 

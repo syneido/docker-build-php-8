@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: 8.3
+      ALPINE_VERSION: 3.20
     steps:
       - name: Check Out Repo
         uses: actions/checkout@v2

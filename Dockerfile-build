@@ -1,6 +1,7 @@
 ARG PHP_VERSION
+ARG ALPINE_VERSION
 FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-cli-alpine3.16 as build
+FROM php:${PHP_VERSION}-cli-alpine${ALPINE_VERSION} as build
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
@@ -16,7 +17,7 @@ RUN HOME=/ \
     && mkdir $COMPOSER_DIR $SYMFONY_DIR \
     && apk add --no-cache $PHPIZE_DEPS \
     && apk add --update linux-headers \
-    && pecl install xdebug-3.2.0 \
+    && pecl install xdebug-3.3.2 \
     && docker-php-ext-enable xdebug \
     && apk del $PHPIZE_DEPS \
     && rm -r /tmp/pear/cache/* /tmp/pear/download/* \
