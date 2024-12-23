@@ -27,7 +27,7 @@ docker-php-ext-configure zip
 docker-php-ext-configure gd --enable-gd --with-jpeg --with-webp --with-freetype
 docker-php-ext-install -j$(nproc) intl mysqli pdo_pgsql pdo_mysql zip soap gmp gd exif
 
-pecl install apcu-5.1.21
+pecl install apcu-5.1.24
 pecl clear-cache
 
 docker-php-ext-enable apcu opcache

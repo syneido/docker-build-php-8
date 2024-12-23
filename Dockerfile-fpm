@@ -1,7 +1,7 @@
 ARG PHP_VERSION
 ARG ALPINE_VERSION
-FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION} as prod
+FROM alpine AS new-alpine
+FROM php:${PHP_VERSION}-fpm-alpine${ALPINE_VERSION} AS prod
 
 COPY configure.sh /
 COPY php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
@@ -16,7 +16,7 @@ RUN /configure.sh \
     && rm /configure.sh
 WORKDIR /var/www
 
-FROM prod as dev
+FROM prod AS dev
 COPY docker-dev-entrypoint /usr/local/bin
 COPY conf.d/90-xdebug.ini /usr/local/etc/php/conf.d/
 
@@ -26,13 +26,13 @@ RUN apk add --no-cache $PHPIZE_DEPS \
     && docker-php-ext-enable xdebug \
     && apk del $PHPIZE_DEPS
 
-FROM prod as prod-sqlsrv
+FROM prod AS prod-sqlsrv
 COPY configure-sqlsrv.sh /
 COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
 RUN /configure-sqlsrv.sh \
     && rm /configure-sqlsrv.sh
 
-FROM dev as dev-sqlsrv
+FROM dev AS dev-sqlsrv
 COPY configure-sqlsrv.sh /
 COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
 RUN /configure-sqlsrv.sh \
