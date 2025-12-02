@@ -3,6 +3,8 @@ ARG ALPINE_VERSION
 FROM alpine AS new-alpine
 FROM php:${PHP_VERSION}-cli-alpine${ALPINE_VERSION} AS build
 
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
 COPY conf.d/90-xdebug.ini /usr/local/etc/php/conf.d/
@@ -17,18 +19,16 @@ RUN HOME=/ \
     && mkdir $COMPOSER_DIR $SYMFONY_DIR \
     && apk add --no-cache $PHPIZE_DEPS \
     && apk add --update linux-headers \
-    && pecl install xdebug-3.4.0 \
-    && docker-php-ext-enable xdebug \
+    && install-php-extensions xdebug \
     && apk del $PHPIZE_DEPS \
-    && rm -r /tmp/pear/cache/* /tmp/pear/download/* \
     # Composer
     && curl --silent --fail-early https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     # Symfony CLI \
     && curl -sS https://get.symfony.com/cli/installer | bash && chmod +x /.symfony5/bin/symfony && mv /.symfony5/bin/symfony /usr/local/bin/symfony \
     # QA - Globally https://twitter.com/s_bergmann/status/999635212723212288
-    && wget -O phpunit https://phar.phpunit.de/phpunit-11.5.2.phar && chmod +x phpunit && mv phpunit /usr/local/bin/phpunit \
-    && wget -O php-cs-fixer-v3 https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.65.0/php-cs-fixer.phar && chmod +x php-cs-fixer-v3 && mv php-cs-fixer-v3 /usr/local/bin/php-cs-fixer \
-    && wget -O phpstan https://github.com/phpstan/phpstan/releases/download/2.0.4/phpstan.phar && chmod +x phpstan && mv phpstan /usr/local/bin/phpstan \
+    && wget -O phpunit https://phar.phpunit.de/phpunit-12.1.6.phar && chmod +x phpunit && mv phpunit /usr/local/bin/phpunit \
+    && wget -O php-cs-fixer-v3 https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.75.0/php-cs-fixer.phar && chmod +x php-cs-fixer-v3 && mv php-cs-fixer-v3 /usr/local/bin/php-cs-fixer \
+    && wget -O phpstan https://github.com/phpstan/phpstan/releases/download/2.1.17/phpstan.phar && chmod +x phpstan && mv phpstan /usr/local/bin/phpstan \
     && chmod -R o+rwx $COMPOSER_DIR $SYMFONY_DIR
 
 WORKDIR /app
