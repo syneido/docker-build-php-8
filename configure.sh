@@ -4,7 +4,7 @@ set -ex
 
 apk update
 
-apk add --no-cache fcgi file gettext gnu-libiconv bash git
+apk add --no-cache fcgi file gettext gnu-libiconv bash git imagemagick
 
 # install gnu-libiconv and set LD_PRELOAD env to make iconv work fully on Alpine image.
 # see https://github.com/docker-library/php/issues/240#issuecomment-763112749
@@ -21,9 +21,10 @@ apk add --no-cache --virtual .build-deps \
     libpng-dev \
     libwebp-dev \
     libjpeg-turbo-dev \
-    freetype-dev
+    freetype-dev \
+    imagemagick-dev
 
-install-php-extensions gd zip intl mysqli pdo_pgsql pdo_mysql soap gmp gd exif apcu opcache ssh2
+install-php-extensions gd zip intl mysqli pdo_pgsql pdo_mysql soap gmp gd exif apcu opcache ssh2 imagick
 
 runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
