@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 8.0
+      PHP_VERSION: 8.0.30
     steps:
       - name: Check Out Repo
         uses: actions/checkout@v2

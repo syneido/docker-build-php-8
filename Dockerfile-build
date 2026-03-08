@@ -1,6 +1,6 @@
 ARG PHP_VERSION
-FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-cli-alpine3.16 as build
+FROM alpine AS new-alpine
+FROM php:${PHP_VERSION}-cli-alpine3.16 AS build
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
@@ -32,7 +32,7 @@ RUN HOME=/ \
 
 WORKDIR /app
 
-FROM build as build-sqlsrv
+FROM build AS build-sqlsrv
 COPY configure-sqlsrv.sh /
 COPY conf.d/90-sqlsrv.ini /usr/local/etc/php/conf.d/
 RUN /configure-sqlsrv.sh \
