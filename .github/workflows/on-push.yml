@@ -1,12 +1,12 @@
 name: deploy to ghcr.io
 on:
   push:
-    branches: [ 8.1 ]
+    branches: [ 8.0 ]
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 8.1
+      PHP_VERSION: 8.0
     steps:
       - name: Check Out Repo
         uses: actions/checkout@v2
