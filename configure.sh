@@ -19,4 +19,3 @@ runDeps="$( \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"
 apk add --no-cache --virtual rundeps $runDeps make
-apk del .build-deps

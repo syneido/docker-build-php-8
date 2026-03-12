@@ -17,5 +17,3 @@ apk update
 apk add --no-cache --virtual .build-deps $PHPIZE_DEPS unixodbc-dev
 
 install-php-extensions sqlsrv pdo_sqlsrv
-
-apk del .build-deps
