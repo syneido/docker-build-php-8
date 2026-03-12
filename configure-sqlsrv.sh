@@ -1,18 +1,21 @@
 #!/usr/bin/env sh
-
 set -ex
+
+case $(uname -m) in
+    x86_64)   architecture="amd64" ;;
+    arm64)   architecture="arm64" ;;
+    *) architecture="unsupported" ;;
+esac
+if [[ "unsupported" == "$architecture" ]];
+then
+    echo "Alpine architecture $(uname -m) is not currently supported.";
+    exit;
+fi
 
 apk update
 
 apk add --no-cache --virtual .build-deps $PHPIZE_DEPS unixodbc-dev
-curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.6.1.1-1_amd64.apk
-curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.6.1.1-1_amd64.apk
 
-apk add --allow-untrusted msodbcsql17_17.6.1.1-1_amd64.apk
-apk add --allow-untrusted mssql-tools_17.6.1.1-1_amd64.apk
+install-php-extensions sqlsrv pdo_sqlsrv
 
-pecl install sqlsrv pdo_sqlsrv
-docker-php-ext-enable sqlsrv pdo_sqlsrv
-
-pecl clear-cache
 apk del .build-deps
