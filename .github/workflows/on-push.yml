@@ -17,12 +17,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       - name: Build and push build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-build
@@ -34,9 +37,10 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Build and push prod-php-fpm
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-fpm
@@ -48,24 +52,26 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Build and push dev-php-fpm
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-fpm
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/dev-php${{ env.PHP_VERSION }}-fpm:latest
           cache-to: type=inline
-          tags: ghcr.io/${{ github.repository_owner }}/dev-php${{ env.PHP_VERSION }}-fpm:latest,
+          tags: ghcr.io/${{ github.repository_owner }}/dev-php${{ env.PHP_VERSION }}-fpm:latest
           target: dev
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-      # SQLSRV version
+      # SQLSRV version — amd64 only: Microsoft ODBC driver has no ARM64 Alpine package
       - name: Build and push build-sqlsrv
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-build
@@ -77,9 +83,10 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Build and push prod-php-fpm-sqlsrv
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-fpm
@@ -91,9 +98,10 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Build and push dev-php-fpm-sqlsrv
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
+          platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
           file: ./Dockerfile-fpm
