@@ -1,7 +1,8 @@
 ARG PHP_VERSION
 ARG ALPINE_VERSION
+ARG PHP_TAG=${PHP_VERSION}
 FROM alpine as new-alpine
-FROM php:${PHP_VERSION}-cli-alpine${ALPINE_VERSION} as build
+FROM php:${PHP_TAG}-cli-alpine${ALPINE_VERSION} as build
 
 COPY configure.sh /
 COPY conf.d/php.prod.ini /usr/local/etc/php/conf.d/php.ini
