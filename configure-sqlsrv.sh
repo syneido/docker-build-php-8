@@ -22,7 +22,7 @@ curl -O https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53
 apk add --allow-untrusted msodbcsql18_18.3.3.1-1_$architecture.apk
 apk add --allow-untrusted mssql-tools18_18.3.1.1-1_$architecture.apk
 
-pecl install sqlsrv pdo_sqlsrv
+pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
 docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 pecl clear-cache
