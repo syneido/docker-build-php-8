@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: 8.3
+      PHP_TAG: 8.3.36
       ALPINE_VERSION: 3.23
     steps:
       - name: Check Out Repo
@@ -28,6 +29,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-build
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/build-php${{ env.PHP_VERSION }}:latest
@@ -43,6 +45,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-fpm
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/prod-php${{ env.PHP_VERSION }}-fpm:latest
@@ -58,6 +61,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-fpm
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/dev-php${{ env.PHP_VERSION }}-fpm:latest
@@ -74,6 +78,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-build
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/build-php${{ env.PHP_VERSION }}-sqlsrv:latest
@@ -89,6 +94,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-fpm
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/prod-php${{ env.PHP_VERSION }}-fpm-sqlsrv:latest
@@ -104,6 +110,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_TAG=${{ env.PHP_TAG }}
           file: ./Dockerfile-fpm
           push: true
           cache-from: type=registry,ref=${{ github.repository_owner }}/dev-php${{ env.PHP_VERSION }}-fpm-sqlsrv:latest
