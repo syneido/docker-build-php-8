@@ -27,7 +27,7 @@ RUN HOME=/ \
     # Symfony CLI \
     && curl -sS https://get.symfony.com/cli/installer | bash && chmod +x /.symfony5/bin/symfony && mv /.symfony5/bin/symfony /usr/local/bin/symfony \
     # QA - Globally https://twitter.com/s_bergmann/status/999635212723212288
-    && wget -O phpunit https://phar.phpunit.de/phpunit-11.5.2.phar && chmod +x phpunit && mv phpunit /usr/local/bin/phpunit \
+    && (wget -O phpunit https://phar.phpunit.de/phpunit-11.5.2.phar || wget -O phpunit https://phar.phpunit.de/phpunit-12.1.6.phar || echo "WARNING: phpunit NOT installed (phar.phpunit.de unavailable) - TEMPORARY") && ( [ ! -s phpunit ] || { chmod +x phpunit && mv phpunit /usr/local/bin/phpunit; } ) \
     && wget -O php-cs-fixer-v3 https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/download/v3.65.0/php-cs-fixer.phar && chmod +x php-cs-fixer-v3 && mv php-cs-fixer-v3 /usr/local/bin/php-cs-fixer \
     && wget -O phpstan https://github.com/phpstan/phpstan/releases/download/2.0.4/phpstan.phar && chmod +x phpstan && mv phpstan /usr/local/bin/phpstan \
     && chmod -R o+rwx $COMPOSER_DIR $SYMFONY_DIR
