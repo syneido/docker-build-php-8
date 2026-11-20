@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: 8.3
-      PHP_TAG: 8.3.36
+      PHP_TAG: 8.3.37
       ALPINE_VERSION: 3.23
     steps:
       - name: Check Out Repo

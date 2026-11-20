@@ -7,6 +7,7 @@ FROM php:${PHP_TAG}-fpm-alpine${ALPINE_VERSION} AS prod
 COPY configure.sh /
 COPY php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY conf.d/php.prod.ini /usr/local/etc/php
+COPY conf.d/91-security.ini /usr/local/etc/php/conf.d/
 COPY --from=new-alpine /etc/ssl/cert.pem /etc/ssl/cert.pem
 
 COPY docker-healthcheck /usr/local/bin/docker-healthcheck
